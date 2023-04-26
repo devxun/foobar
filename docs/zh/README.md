@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: hero.png
+heroImage: /hero.png
 heroText: VuePress
 tagline: Vue 驱动的静态网站生成器
 actionText: 快速上手 →
