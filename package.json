@@ -1,0 +1,15 @@
+{
+  "name": "foobar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nobody-foo-bar-baz-qux/foobar.git",
+  "author": "zhouxun <mail4Ltd@163.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.9.9"
+  },
+  "scripts": {
+    "docs:dev": "SET NODE_OPTIONS=--openssl-legacy-provider && vuepress dev docs",
+    "docs:build": "SET NODE_OPTIONS=--openssl-legacy-provider && vuepress build docs"
+  }
+}
