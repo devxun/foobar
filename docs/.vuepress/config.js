@@ -1,4 +1,5 @@
 module.exports = {
+  head: [['link', { rel: 'icon', href: '/logo.png' }]],
   title: 'Nobody-Foo-Bar-Baz-Qux',
   description: 'https://github.com/nobody-foo-bar-baz-qux',
   locales: {
