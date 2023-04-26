@@ -25,7 +25,19 @@ module.exports = {
           },
         },
         algolia: {},
-        nav: [{ text: 'Nested', link: '/nested/', ariaLabel: 'Nested' }],
+        nav: [
+          { text: 'Front-end', link: '/front-end/' },
+          { text: 'Back-end', link: '/back-end/' },
+          {
+            text: 'Database',
+            ariaLabel: 'Database Menu',
+            items: [
+              { text: 'SQL', link: '/database/sql/' },
+              { text: 'NoSQL', link: '/database/nosql/' },
+            ],
+          },
+          { text: 'Big-Data', link: '/big-data/' },
+        ],
         sidebar: {
           '/': [
             /* ... */
@@ -51,7 +63,19 @@ module.exports = {
         },
         // 当前 locale 的 algolia docsearch 选项
         algolia: {},
-        nav: [{ text: '嵌套', link: '/zh/nested/' }],
+        nav: [
+          { text: '前端', link: '/zh/front-end/' },
+          { text: '后端', link: '/zh/back-end/' },
+          {
+            text: '数据库',
+            ariaLabel: '数据库菜单',
+            items: [
+              { text: 'SQL', link: '/database/sql/' },
+              { text: 'NoSQL', link: '/database/nosql/' },
+            ],
+          },
+          { text: '大数据', link: '/zh/big-data/' },
+        ],
         sidebar: {
           '/zh/': [
             /* ... */
