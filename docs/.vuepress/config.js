@@ -15,8 +15,10 @@ module.exports = {
     logo: '/logo.png',
     sidebarDepth: 2, // 侧边栏：嵌套的标题链接
     displayAllHeaders: true, // 侧边栏：显示所有页面的标题链接
+    searchMaxSuggestions: 10, // 调整默认搜索框显示的搜索结果数量
     locales: {
       '/': {
+        lastUpdated: 'Last Updated',
         selectText: 'Languages',
         label: 'English',
         ariaLabel: 'Languages',
@@ -51,6 +53,7 @@ module.exports = {
         },
       },
       '/zh/': {
+        lastUpdated: '上次更新',
         // 多语言下拉菜单的标题
         selectText: '选择语言',
         // 该语言在下拉菜单中的标签
