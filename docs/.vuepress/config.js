@@ -13,8 +13,8 @@ module.exports = {
   },
   themeConfig: {
     logo: '/logo.png',
-    sidebarDepth: 2,
-    displayAllHeaders: true,
+    sidebarDepth: 2, // 侧边栏：嵌套的标题链接
+    displayAllHeaders: true, // 侧边栏：显示所有页面的标题链接
     locales: {
       '/': {
         selectText: 'Languages',
@@ -83,6 +83,7 @@ module.exports = {
           '/zh/database/sql/': [
             {
               title: '企业',
+              // 侧边栏：让一个组永远都是展开状态
               collapsable: false,
               children: ['Oracle', 'SQL-Server'],
             },
