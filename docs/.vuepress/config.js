@@ -1,6 +1,6 @@
 module.exports = {
   head: [['link', { rel: 'icon', href: '/logo.png' }]],
-  title: 'Nobody-Foo-Bar-Baz-Qux',
+  title: 'FooBar',
   description: 'https://github.com/nobody-foo-bar-baz-qux',
   locales: {
     '/': {
@@ -75,6 +75,7 @@ module.exports = {
         // 当前 locale 的 algolia docsearch 选项
         algolia: {},
         nav: [
+          { text: '计算机课程体系', link: '/zh/guidance-of-courses/' },
           { text: '前端', link: '/zh/front-end/' },
           { text: '后端', link: '/zh/back-end/' },
           {
@@ -86,6 +87,8 @@ module.exports = {
             ],
           },
           { text: '大数据', link: '/zh/big-data/' },
+          { text: '软件列表', link: '/zh/software-list/' },
+          { text: '我的开源项目', link: '/zh/my-open-source/' },
           // {
           //   text: 'GitHub',
           //   link: 'https://github.com/nobody-foo-bar-baz-qux/foobar',
