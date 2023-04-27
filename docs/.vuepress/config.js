@@ -16,6 +16,11 @@ module.exports = {
     sidebarDepth: 2, // 侧边栏：嵌套的标题链接
     displayAllHeaders: true, // 侧边栏：显示所有页面的标题链接
     searchMaxSuggestions: 10, // 调整默认搜索框显示的搜索结果数量
+    repo: 'https://github.com/nobody-foo-bar-baz-qux/foobar',
+    // Git 仓库和编辑链接
+    docsDir: 'docs',
+    docsBranch: 'main',
+    editLinks: true,
     locales: {
       '/': {
         lastUpdated: 'Last Updated',
@@ -81,6 +86,10 @@ module.exports = {
             ],
           },
           { text: '大数据', link: '/zh/big-data/' },
+          // {
+          //   text: 'GitHub',
+          //   link: 'https://github.com/nobody-foo-bar-baz-qux/foobar',
+          // },
         ],
         sidebar: {
           '/zh/database/sql/': [
