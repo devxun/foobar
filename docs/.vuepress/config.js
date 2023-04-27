@@ -13,6 +13,8 @@ module.exports = {
   },
   themeConfig: {
     logo: '/logo.png',
+    sidebarDepth: 2,
+    displayAllHeaders: true,
     locales: {
       '/': {
         selectText: 'Languages',
@@ -71,18 +73,41 @@ module.exports = {
             text: '数据库',
             ariaLabel: '数据库菜单',
             items: [
-              { text: 'SQL', link: '/database/sql/' },
-              { text: 'NoSQL', link: '/database/nosql/' },
+              { text: 'SQL', link: '/zh/database/sql/' },
+              { text: 'NoSQL', link: '/zh/database/nosql/' },
             ],
           },
           { text: '大数据', link: '/zh/big-data/' },
         ],
         sidebar: {
-          '/zh/': [
-            /* ... */
+          '/zh/database/sql/': [
+            {
+              title: '企业',
+              collapsable: false,
+              children: ['Oracle', 'SQL-Server'],
+            },
+            {
+              title: '个人',
+              collapsable: false,
+              children: ['MySQL', 'PostgreSQL'],
+            },
           ],
-          '/zh/nested/': [
-            /* ... */
+          '/zh/database/nosql/': [
+            {
+              title: '宽列数据库',
+              collapsable: false,
+              children: ['HBase'],
+            },
+            {
+              title: '文档数据库',
+              collapsable: false,
+              children: ['MongoDB'],
+            },
+            {
+              title: '键值数据库',
+              collapsable: false,
+              children: ['Redis'],
+            },
           ],
         },
       },
