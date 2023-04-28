@@ -36,8 +36,37 @@ module.exports = {
         },
         algolia: {},
         nav: [
-          { text: 'Front-end', link: '/front-end/' },
-          { text: 'Back-end', link: '/back-end/' },
+          {
+            text: 'Guidance-Of-Courses',
+            link: '/guidance-of-courses/',
+            ariaLabel: 'Guidance-Of-Courses Menu',
+            items: [
+              { text: 'Freshman', link: '/guidance-of-courses/freshman/' },
+              { text: 'Sophomore', link: '/guidance-of-courses/sophomore/' },
+              { text: 'Junior', link: '/guidance-of-courses/junior/' },
+              { text: 'Senior', link: '/guidance-of-courses/senior/' },
+            ],
+          },
+          {
+            text: 'Front-end',
+            ariaLabel: 'Front-end Menu',
+            items: [
+              { text: 'HTML', link: '/front-end/html/' },
+              { text: 'CSS', link: '/front-end/css/' },
+              { text: 'JavaScript', link: '/front-end/javascript/' },
+              { text: 'Vue.js', link: '/front-end/vue/' },
+              { text: 'React.js', link: '/front-end/react/' },
+            ],
+          },
+          {
+            text: 'Back-end',
+            ariaLabel: 'Back-end Menu',
+            items: [
+              { text: 'Java', link: '/back-end/java/' },
+              { text: 'Go', link: '/back-end/go/' },
+              { text: 'PHP', link: '/back-end/php/' },
+            ],
+          },
           {
             text: 'Database',
             ariaLabel: 'Database Menu',
@@ -46,7 +75,23 @@ module.exports = {
               { text: 'NoSQL', link: '/database/nosql/' },
             ],
           },
-          { text: 'Big-Data', link: '/big-data/' },
+          {
+            text: 'Big-Data',
+            ariaLabel: 'Big-Data Menu',
+            items: [
+              { text: 'Hadoop', link: '/big-data/hadoop/' },
+              { text: 'Spark', link: '/big-data/spark/' },
+            ],
+          },
+          { text: 'Software-List', link: '/software-list/' },
+          {
+            text: 'My-Open-Source',
+            ariaLabel: 'My-Open-Source Menu',
+            items: [
+              { text: 'GitHub', link: '/my-open-source/github/' },
+              { text: 'Gitee', link: '/my-open-source/gitee/' },
+            ],
+          },
         ],
         sidebar: {
           '/': [
