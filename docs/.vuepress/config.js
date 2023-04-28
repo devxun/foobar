@@ -75,9 +75,37 @@ module.exports = {
         // 当前 locale 的 algolia docsearch 选项
         algolia: {},
         nav: [
-          { text: '计算机课程体系', link: '/zh/guidance-of-courses/' },
-          { text: '前端', link: '/zh/front-end/' },
-          { text: '后端', link: '/zh/back-end/' },
+          {
+            text: '计算机课程体系',
+            link: '/zh/guidance-of-courses/',
+            ariaLabel: '计算机课程体系菜单',
+            items: [
+              { text: '大一', link: '/zh/guidance-of-courses/freshman/' },
+              { text: '大二', link: '/zh/guidance-of-courses/sophomore/' },
+              { text: '大三', link: '/zh/guidance-of-courses/junior/' },
+              { text: '大四', link: '/zh/guidance-of-courses/senior/' },
+            ],
+          },
+          {
+            text: '前端',
+            ariaLabel: '前端菜单',
+            items: [
+              { text: 'HTML', link: '/zh/front-end/html/' },
+              { text: 'CSS', link: '/zh/front-end/css/' },
+              { text: 'JavaScript', link: '/zh/front-end/javascript/' },
+              { text: 'Vue.js', link: '/zh/front-end/vue/' },
+              { text: 'React.js', link: '/zh/front-end/react/' },
+            ],
+          },
+          {
+            text: '后端',
+            ariaLabel: '后端菜单',
+            items: [
+              { text: 'Java', link: '/zh/back-end/java/' },
+              { text: 'Go', link: '/zh/back-end/go/' },
+              { text: 'PHP', link: '/zh/back-end/php/' },
+            ],
+          },
           {
             text: '数据库',
             ariaLabel: '数据库菜单',
@@ -86,9 +114,23 @@ module.exports = {
               { text: 'NoSQL', link: '/zh/database/nosql/' },
             ],
           },
-          { text: '大数据', link: '/zh/big-data/' },
+          {
+            text: '大数据',
+            ariaLabel: '大数据菜单',
+            items: [
+              { text: 'Hadoop', link: '/zh/big-data/hadoop/' },
+              { text: 'Spark', link: '/zh/big-data/spark/' },
+            ],
+          },
           { text: '软件列表', link: '/zh/software-list/' },
-          { text: '我的开源项目', link: '/zh/my-open-source/' },
+          {
+            text: '我的开源项目',
+            ariaLabel: '我的开源项目菜单',
+            items: [
+              { text: 'GitHub', link: '/zh/my-open-source/github/' },
+              { text: 'Gitee', link: '/zh/my-open-source/gitee/' },
+            ],
+          },
           // {
           //   text: 'GitHub',
           //   link: 'https://github.com/nobody-foo-bar-baz-qux/foobar',
