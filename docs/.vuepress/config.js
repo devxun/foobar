@@ -56,6 +56,9 @@ module.exports = {
               { text: 'JavaScript', link: '/front-end/javascript/' },
               { text: 'Vue.js', link: '/front-end/vue/' },
               { text: 'React.js', link: '/front-end/react/' },
+              { text: 'UI', link: '/zh/front-end/ui/' },
+              { text: 'Node.js', link: '/zh/front-end/node/' },
+              { text: 'TypeScript', link: '/zh/front-end/typescript/' },
             ],
           },
           {
@@ -140,6 +143,9 @@ module.exports = {
               { text: 'JavaScript', link: '/zh/front-end/javascript/' },
               { text: 'Vue.js', link: '/zh/front-end/vue/' },
               { text: 'React.js', link: '/zh/front-end/react/' },
+              { text: 'UI', link: '/zh/front-end/ui/' },
+              { text: 'Node.js', link: '/zh/front-end/node/' },
+              { text: 'TypeScript', link: '/zh/front-end/typescript/' },
             ],
           },
           {
@@ -182,6 +188,22 @@ module.exports = {
           // },
         ],
         sidebar: {
+          '/zh/front-end/ui/': [
+            {
+              title: 'UI',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['Element'],
+            },
+          ],
+          '/zh/front-end/node/': [
+            {
+              title: 'Node.js',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['Electron', 'Express'],
+            },
+          ],
           '/zh/database/sql/': [
             {
               title: '企业',
@@ -210,6 +232,14 @@ module.exports = {
               title: '键值数据库',
               collapsable: false,
               children: ['Redis'],
+            },
+          ],
+          '/zh/big-data/hadoop/': [
+            {
+              title: 'Hadoop',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['HDFS', 'MapReduce'],
             },
           ],
         },
