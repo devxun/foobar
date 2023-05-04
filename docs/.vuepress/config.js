@@ -3,10 +3,11 @@ module.exports = {
   title: 'FooBar',
   description: 'https://github.com/nobody-foo-bar-baz-qux',
   locales: {
-    '/': {
-      // 将会被设置为 <html> 的 lang 属性
-      lang: 'en-US',
-    },
+    // 语言选择开关
+    // '/': {
+    //   // 将会被设置为 <html> 的 lang 属性
+    //   lang: 'en-US',
+    // },
     '/zh/': {
       lang: 'zh-CN',
     },
