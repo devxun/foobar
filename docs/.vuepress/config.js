@@ -86,7 +86,11 @@ module.exports = {
               { text: 'Spark', link: '/big-data/spark/' },
             ],
           },
-          { text: 'Software-List', link: '/software-list/' },
+          {
+            text: 'Software-List',
+            ariaLabel: 'Software-List Menu',
+            items: [{ text: 'Git', link: '/software-list/git/' }],
+          },
           {
             text: 'My-Open-Source',
             ariaLabel: 'My-Open-Source Menu',
@@ -149,6 +153,14 @@ module.exports = {
               // 侧边栏：让一个组永远都是展开状态
               collapsable: false,
               children: ['HDFS', 'MapReduce'],
+            },
+          ],
+          '/software-list/git/': [
+            {
+              title: 'Git',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['Git', 'TortoiseGit'],
             },
           ],
         },
@@ -221,7 +233,11 @@ module.exports = {
               { text: 'Spark', link: '/zh/big-data/spark/' },
             ],
           },
-          { text: '软件列表', link: '/zh/software-list/' },
+          {
+            text: '软件列表',
+            ariaLabel: '软件列表菜单',
+            items: [{ text: 'Git', link: '/zh/software-list/git/' }],
+          },
           {
             text: '我的开源项目',
             ariaLabel: '我的开源项目菜单',
@@ -288,6 +304,14 @@ module.exports = {
               // 侧边栏：让一个组永远都是展开状态
               collapsable: false,
               children: ['HDFS', 'MapReduce'],
+            },
+          ],
+          '/zh/software-list/git/': [
+            {
+              title: 'Git',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['Git', 'TortoiseGit'],
             },
           ],
         },
