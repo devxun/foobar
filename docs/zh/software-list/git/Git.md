@@ -73,7 +73,7 @@ git checkout -b [branch-name] # 新建分支并切换
 
 ```sh
 git remote -v # 显示远程仓库信息
-git remote add [url] # 添加远程仓库
+git remote add origin [url] # 添加远程仓库
 git pull [remote] [branch] # 拉取远程仓库的变化，并与本地分支合并
 git push [remote] [branch] # 提交本地指定分支到远程仓库
 
