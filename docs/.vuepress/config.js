@@ -1,5 +1,5 @@
 module.exports = {
-  head: [['link', { rel: 'icon', href: '/logo.png' }]],
+  head: [['link', { rel: 'icon', href: '/favicon/logo.png' }]],
   title: 'FooBar',
   description: 'https://github.com/nobody-foo-bar-baz-qux',
   locales: {
@@ -13,7 +13,7 @@ module.exports = {
     },
   },
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/favicon/logo.png',
     sidebarDepth: 2, // 侧边栏：嵌套的标题链接
     displayAllHeaders: true, // 侧边栏：显示所有页面的标题链接
     searchMaxSuggestions: 10, // 调整默认搜索框显示的搜索结果数量

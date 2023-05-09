@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /hero.png
+heroImage: /home/hero.png
 heroText: FooBar
 tagline: A documentation site for knowledge management and technical blogs
 actionText: Get Started →

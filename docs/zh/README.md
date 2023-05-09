@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /hero.png
+heroImage: /home/hero.png
 heroText: FooBar
 tagline: 一款用于知识管理和技术博客的文档网站
 actionText: 快速上手 →
