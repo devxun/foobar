@@ -249,6 +249,8 @@ db.myFirstCollection.deleteMany({})
 | 或（or）                   | `{ $or: [ { field01: value01 }, { field02: value02 }, ... ] }` | `db.myFirstCollection.find( { $or: [ { name: 'Sun Wukong' }, { age: 18 } ] } )` | `where name='Sun Wukong' or age=18`             |
 | 包含（in）                 | `{ field: { $in: [ value01, value02, ... ] } }`              | `db.myFirstCollection.find( { name: { $in: [ 'Sun Wukong', 'Zhu Bajie' ] } } )` | `where name in ('Sun Wukong', 'Zhu Bajie')`     |
 | 不包含（nin）              | `{ field: { $nin: [ value01, value02, ... ] } }`             | `db.myFirstCollection.find( { name: { $nin: [ 'Sun Wukong', 'Zhu Bajie' ] } } )` | `where name not in ('Sun Wukong', 'Zhu Bajie')` |
+| 正则表达式（包含）         | `{ field: { $regex: /value/ } }`                             | `db.myFirstCollection.find( { name: { $regex: /Wu/ } } )`    | `where name like '%Wu%'`                        |
+| 正则表达式（以…开头）      | `{ field: { $regex: /^value/ } }`                            | `db.myFirstCollection.find( { name: { $regex: /^Sun/ } } )`  | `where name like '%Sun'`                        |
+| 正则表达式（以…结尾）      | `{ field: { $regex: /value$/ } }`                            | `db.myFirstCollection.find( { name: { $regex: /kong$/ } } )` | `where name like 'kong%'`                       |
 
 ## Python
-
