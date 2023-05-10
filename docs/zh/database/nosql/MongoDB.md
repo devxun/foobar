@@ -138,13 +138,20 @@ db.myFirstCollection.insertMany( [ { name: 'Zhu Bajie' }, { name: 'Sha Heshang' 
 db.< collection-name >.find()
 db.< collection-name >.find({})
 // 查询所有符合指定条件的文档
-db.myFirstCollection.find( [ query ] )
+db.< collection-name >.find( [ query ] )
 // 查询第一个文档
 db.< collection-name >.findOne()
 // 查询第一个符合指定条件的文档
 db.< collection-name >.findOne( [ query ] )
 // 格式化查询结果
 db.< collection-name >.find( [ query ] ).pretty()
+// 限制查询结果返回的个数
+db.< collection-name >.find( [ query ] ).limit( < number > )
+// 略过指定个数的文档
+db.< collection-name >.find( [ query ] ).skip( < number > )
+// 对查询结果进行排序，1 是升序，-1 是降序
+db.< collection-name >.find( [ query ] ).sort( { filed: 1 } )
+db.< collection-name >.find( [ query ] ).sort( { filed: -1 } )
 ```
 
 ##### 示例：
@@ -164,6 +171,13 @@ db.myFirstCollection.findOne()
 db.myFirstCollection.findOne( { name: 'Sun Wukong' } )
 // 格式化查询结果
 db.myFirstCollection.find().pretty()
+// 限制查询结果返回的个数
+db.myFirstCollection.find().limit(3)
+// 略过指定个数的文档
+db.myFirstCollection.find().skip(2)
+// 对查询结果进行排序，1 是升序，-1 是降序
+db.myFirstCollection.find().sort( { age: 1 } )
+db.myFirstCollection.find().sort( { age: -1 } )
 ```
 
 #### 更新文档
