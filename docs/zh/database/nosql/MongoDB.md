@@ -119,7 +119,7 @@ db.myFourthCollection.drop()
 // 插入单个
 db.< collection-name >.insertOne( < document > )
 // 插入多个
-db.< collection-name >.insertMany( < documents-list > )
+db.< collection-name >.insertMany( < document-list > )
 ```
 
 ##### 示例：
@@ -135,12 +135,11 @@ db.myFirstCollection.insertMany( [ { name: 'Zhu Bajie' }, { name: 'Sha Heshang' 
 
 ```js
 // 查询所有文档
-db.< collection-name >.find()
-db.< collection-name >.find({})
+db.< collection-name >.find({}) // db.< collection-name >.find()
 // 查询所有符合指定条件的文档
 db.< collection-name >.find( [ query ] )
 // 查询第一个文档
-db.< collection-name >.findOne()
+db.< collection-name >.findOne({})
 // 查询第一个符合指定条件的文档
 db.< collection-name >.findOne( [ query ] )
 // 格式化查询结果
@@ -162,22 +161,22 @@ db.myFirstCollection.insertOne( { name: 'Zhu Bajie', age: 18 } )
 db.myFirstCollection.insertOne( { name: 'Sha Heshang', age: 15 } )
 
 // 查询所有的文档
-db.myFirstCollection.find() // db.myFirstCollection.find({})
+db.myFirstCollection.find({}) // db.myFirstCollection.find({})
 // 查询所有 name: Sun Wukong 的文档
 db.myFirstCollection.find( { name: 'Sun Wukong' } )
 // 查询第一个文档
-db.myFirstCollection.findOne()
+db.myFirstCollection.findOne({})
 // 查询第一个 name: Sun Wukong 的文档
 db.myFirstCollection.findOne( { name: 'Sun Wukong' } )
 // 格式化查询结果
-db.myFirstCollection.find().pretty()
+db.myFirstCollection.find({}).pretty()
 // 限制查询结果返回的个数
-db.myFirstCollection.find().limit(3)
+db.myFirstCollection.find({}).limit(3)
 // 略过指定个数的文档
-db.myFirstCollection.find().skip(2)
+db.myFirstCollection.find({}).skip(2)
 // 对查询结果进行排序，1 是升序，-1 是降序
-db.myFirstCollection.find().sort( { age: 1 } )
-db.myFirstCollection.find().sort( { age: -1 } )
+db.myFirstCollection.find({}).sort( { age: 1 } )
+db.myFirstCollection.find({}).sort( { age: -1 } )
 ```
 
 #### 更新文档
@@ -254,3 +253,276 @@ db.myFirstCollection.deleteMany({})
 | 正则表达式（以…结尾）      | `{ field: { $regex: /value$/ } }`                            | `db.myFirstCollection.find( { name: { $regex: /kong$/ } } )` | `where name like 'kong%'`                       |
 
 ## Python
+
+> pymongo 3.12.0
+
+### 安装包
+
+```bash
+# pip
+pip install pymongo
+# conda
+conda install pymongo
+```
+
+### 导入包
+
+```python
+import pymongo
+```
+
+### 连接 MongoDB 服务器
+
+#### 语法：
+
+```python
+# 方式 1
+< connection-object-name > = pymongo.MongoClient('mongodb:// < ip > : < port >')
+# 方式 2
+< connection-object-name > = pymongo.MongoClient( < ip >, < port > )
+# 方式 3
+< connection-object-name > = pymongo.MongoClient(host= < ip >, port= < port > )
+```
+
+#### 示例：
+
+```python
+# 方式 1
+my_connection = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
+# 方式 2
+my_connection = pymongo.MongoClient("127.0.0.1", 27017)
+# 方式 3
+my_connection = pymongo.MongoClient(host="127.0.0.1", port=27017)
+```
+
+### 访问数据库
+
+#### 语法：
+
+```python
+# 方式 1：中括号运算符
+< database-object-name > = < connection-object-name >[ < database-name > ]
+# 方式 2：点运算符
+< database-object-name > = < connection-object-name >.< database-name >
+# 方式 1
+< database-object-name > = < connection-object-name >.get_database( < database-name > )
+```
+
+#### 示例：
+
+```python
+# 方式 1
+my_database = my_connection['myDatabase']
+# 方式 2
+my_database = my_connection.myDatabase
+# 方式 3
+my_database = my_connection.get_database('myDatabase')
+```
+
+### 访问集合
+
+#### 语法：
+
+```python
+# 方式 1：中括号运算符
+< collection-object-name > = < database-object-name >[ < collection-name > ]
+# 方式 2：点运算符
+< collection-object-name > = < database-object-name >.< collection-name >
+# 方式 1
+< collection-object-name > = < database-object-name >.get_collection( < collection-name > )
+```
+
+#### 示例：
+
+```python
+# 方式 1
+my_collection = my_database['myCollection']
+# 方式 2
+my_collection = my_database.my_collection
+# 方式 3
+my_collection = my_database.get_collection('myCollection')
+```
+
+### 操作文档
+
+#### 插入文档
+
+##### 语法：
+
+```python
+# 插入单个
+< collection-object-name >.insert_one( < document > )
+# 插入多个
+< collection-object-name >.insert_many( < document-list > )
+```
+
+##### 示例：
+
+```python
+# 插入单个
+my_collection.insert_one({'name': 'Sun Wukong', 'age': 19})
+# 插入多个
+my_collection.insert_many([{'name': 'Zhu Bajie', 'age': 18}, {'name': 'Sha Heshang', 'age': 15}])
+```
+
+#### 查询文档
+
+##### 语法：
+
+```python
+# 查询第一个文档
+< collection-object-name >.find_one( < condition > )
+# 查询所有文档
+< collection-object-name >.find( < condition > )
+```
+
+##### 示例：
+
+```python
+# 查询第一个文档
+my_collection.find_one({'name': 'Sun Wukong'})
+# 查询所有文档
+my_collection.find({})
+```
+
+#### 更新文档
+
+##### 语法：
+
+```python
+# 更新单个
+< collection-object-name >.update_one( < condition >, < update > )
+# 更新多个
+< collection-object-name >.update_many( < condition >, < update > )
+```
+
+##### 示例：
+
+```python
+# 更新单个
+my_collection.update_one({'name': 'Sun Wukong'}, {'$set': {'name': 'Sun Xingzhe'}})
+# 更新多个
+my_collection.update_many({'name': 'Sun Wukong'}, {'$set': {'name': 'Sun Xingzhe'}})
+```
+
+#### 删除文档
+
+##### 语法：
+
+```python
+# 删除单个
+< collection-object-name >.delete_one( < condition > )
+# 删除多个
+< collection-object-name >.delete_many( < condition > )
+```
+
+##### 示例：
+
+```python
+# 删除单个
+my_collection.delete_one({'name': 'Sun Wukong'})
+# 删除多个
+my_collection.delete_many({})
+```
+
+### 编码实现
+
+```python
+import pymongo
+
+
+# 连接 MongoDB
+def connect_server(host, port, database_name, collection_name):
+    # 连接 MongoDB 服务器
+    my_connection = pymongo.MongoClient(host, port)
+    # 访问数据库
+    my_database = my_connection.get_database(database_name)
+    # 访问集合
+    my_collection = my_database.get_collection(collection_name)
+    return my_collection
+
+
+# 插入单个文档
+def insert_document(collection, document):
+    collection.insert_one(document)
+
+
+# 插入多个文档
+def insert_documents(collection, document_list):
+    collection.insert_many(document_list)
+
+
+# 查询单个文档
+def find_document(collection, condition):
+    result = collection.find_one(condition)
+    print(result)
+
+
+# 查询多个文档
+def find_documents(collection, condition):
+    results = collection.find(condition)
+    for result in results:
+        print(result)
+
+
+# 更新单个文档
+def update_document(collection, condition, update):
+    collection.update_one(condition, update)
+
+
+# 更新多个文档
+def update_documents(collection, condition, update):
+    collection.update_many(condition, update)
+
+
+# 删除单个文档
+def delete_document(collection, condition):
+    collection.delete_one(condition)
+
+
+# 删除多个文档
+def delete_documents(collection, condition):
+    collection.delete_many(condition)
+
+
+# 插入操作
+def operate_insert():
+    collection = connect_server('127.0.0.1', 27017, 'myDatabase', 'myCollection')
+    document = {'name': 'Sun Wukong', 'age': 19}
+    document_list = [{'name': 'Zhu Bajie', 'age': 18}, {'name': 'Sha Heshang', 'age': 15}]
+    insert_document(collection, document)
+    insert_documents(collection, document_list)
+
+
+# 查询操作
+def operate_find():
+    collection = connect_server('127.0.0.1', 27017, 'myDatabase', 'myCollection')
+    # condition = {'name': 'Sun Wukong'}
+    # find_document(collection, condition)
+    find_documents(collection, {})
+
+
+# 更新操作
+def operate_update():
+    collection = connect_server('127.0.0.1', 27017, 'myDatabase', 'myCollection')
+    condition = {'name': 'Sun Wukong'}
+    update = {'$set': {'name': 'Sun Xingzhe'}}
+    # update_document(collection, condition, update)
+    update_documents(collection, condition, update)
+
+
+# 删除操作
+def operate_delete():
+    collection = connect_server('127.0.0.1', 27017, 'myDatabase', 'myCollection')
+    condition = {'name': 'Sun Xingzhe'}
+    delete_document(collection, condition)
+    delete_documents(collection, {})
+
+    
+# operate_insert()
+# operate_find()
+# operate_update()
+operate_delete()
+
+```
+
