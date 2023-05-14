@@ -253,6 +253,14 @@ module.exports = {
           // },
         ],
         sidebar: {
+          '/zh/front-end/vue/': [
+            {
+              title: 'vue',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['Vue2', 'Vue3'],
+            },
+          ],
           '/zh/front-end/ui/': [
             {
               title: 'UI',
