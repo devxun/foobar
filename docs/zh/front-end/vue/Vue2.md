@@ -313,7 +313,9 @@ vm.$watch('a', function (newValue, oldValue) {
 
 生命周期钩子的 `this` 上下文指向调用它的 Vue 实例。
 
-不要在选项 property 或回调上使用箭头函数，因为箭头函数并没有 `this`，`this` 会作为变量一直向上级词法作用域查找，直至找到为止，经常导致 `Uncaught TypeError: Cannot read property of undefined` 或 `Uncaught TypeError: this.myMethod is not a function` 之类的错误。
+> 不要在选项 property 或回调上使用箭头函数，因为箭头函数并没有 `this`，`this` 会作为变量一直向上级词法作用域查找，直至找到为止，经常导致 `Uncaught TypeError: Cannot read property of undefined` 或 `Uncaught TypeError: this.myMethod is not a function` 之类的错误。
+
+TODO：生命周期图示
 
 ## 模板语法
 
@@ -402,4 +404,215 @@ Mustache 语法不能作用在 HTML attribute 上，遇到这种情况应该使�
 ```
 
 > 模板表达式都被放在沙盒中，只能访问全局变量的一个白名单，如 `Math` 和 `Date` 。不应该在模板表达式中试图访问用户定义的全局变量。
+
+### 指令
+
+指令（Directives）是带有 `v-` 前缀的特殊 attribute。指令 attribute 的值预期是**单个 JavaScript 表达式**（`v-for` 是例外情况）。指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM。
+
+#### 参数
+
+一些指令能够接收一个“参数”，在指令名称之后以冒号表示。
+
+```html
+<a v-bind:href="url">...</a>
+```
+
+在这里 `href` 是参数，告知 `v-bind` 指令将该元素的 `href` attribute 与表达式 `url` 的值绑定。
+
+```html
+<a v-on:click="doSomething">...</a>
+```
+
+在这里参数是监听的事件名。
+
+#### 动态参数
+
+可以用方括号括起来的 JavaScript 表达式作为一个指令的参数。
+
+```html
+<a v-bind:[attributeName]="url"> ... </a>
+```
+
+这里的 `attributeName` 会被作为一个 JavaScript 表达式进行动态求值，求得的值将会作为最终的参数来使用。例如，如果 Vue 实例有一个 `data` property `attributeName`，其值为 `"href"`，那么这个绑定将等价于 `v-bind:href`。
+
+```html
+<a v-on:[eventName]="doSomething"> ... </a>
+```
+
+当 `eventName` 的值为 `"focus"` 时，`v-on:[eventName]` 将等价于 `v-on:focus`。
+
+##### 对动态参数的值的约束
+
+动态参数预期会求出一个字符串，异常情况下值为 `null`。这个特殊的 `null` 值可以被显性地用于移除绑定。任何其它非字符串类型的值都将会触发一个警告。
+
+##### 对动态参数表达式的约束
+
+动态参数表达式有一些语法约束，因为某些字符，如空格和引号，放在 HTML attribute 名里是无效的。例如：
+
+```html
+<!-- 这会触发一个编译警告 -->
+<a v-bind:['foo' + bar]="value"> ... </a>
+```
+
+变通的办法是使用没有空格或引号的表达式，或用计算属性替代这种复杂表达式。
+
+在 DOM 中使用模板时（直接在一个 HTML 文件里撰写模板），还需要避免使用大写字符来命名键名，因为浏览器会把 attribute 名全部强制转为小写：
+
+```html
+<!--
+在 DOM 中使用模板时这段代码会被转换为 `v-bind:[someattr]`。
+除非在实例中有一个名为“someattr”的 property，否则代码不会工作。
+-->
+<a v-bind:[someAttr]="value"> ... </a>
+```
+
+#### 修饰符
+
+修饰符（modifier）是以半角句号 `.` 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，`.prevent` 修饰符告诉 `v-on` 指令对于触发的事件调用 `event.preventDefault()`：
+
+```html
+<form v-on:submit.prevent="onSubmit">...</form>
+```
+
+### 缩写
+
+#### `v-bind` 缩写
+
+```html
+<!-- 完整语法 -->
+<a v-bind:href="url">...</a>
+
+<!-- 缩写 -->
+<a :href="url">...</a>
+
+<!-- 动态参数的缩写 -->
+<a :[key]="url"> ... </a>
+```
+
+#### `v-on` 缩写
+
+```html
+<!-- 完整语法 -->
+<a v-on:click="doSomething">...</a>
+
+<!-- 缩写 -->
+<a @click="doSomething">...</a>
+
+<!-- 动态参数的缩写 -->
+<a @[event]="doSomething"> ... </a>
+```
+
+## 计算属性和侦听器
+
+#### 计算属性
+
+##### 基础例子
+
+```html
+<div id="example">
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+```
+
+```js
+var vm = new Vue({
+  el: '#example',
+  data: {
+    message: 'Hello'
+  },
+  computed: {
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+```
+
+这里声明了一个计算属性 `reversedMessage`。提供的函数将用作 property `vm.reversedMessage` 的 getter 函数。
+
+##### 计算属性缓存 vs 方法
+
+可以将同一函数定义为一个方法而不是一个计算属性。两种方式的最终结果确实是完全相同的。然而，不同的是**计算属性是基于它们的响应式依赖进行缓存的**。只在相关响应式依赖发生改变时它们才会重新求值。这就意味着只要 `message` 还没有发生改变，多次访问 `reversedMessage` 计算属性会立即返回之前的计算结果，而不必再次执行函数。 
+
+相比之下，每当触发重新渲染时，调用方法将**总会**再次执行函数。
+
+为什么需要缓存？假设有一个性能开销比较大的计算属性 **A**，它需要遍历一个巨大的数组并做大量的计算。然后可能有其他的计算属性依赖于 **A**。如果没有缓存，我们将不可避免的多次执行 **A** 的 getter！如果不希望有缓存，请用方法来替代。
+
+##### 计算属性 vs 侦听属性
+
+Vue 提供了一种更通用的方式来观察和响应 Vue 实例上的数据变动：**侦听属性**。通常更好的做法是使用计算属性而不是命令式的 `watch` 回调。
+
+```html
+<div id="demo">{{ fullName }}</div>
+```
+
+```js
+// 侦听属性
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar',
+    fullName: 'Foo Bar'
+  },
+  watch: {
+    firstName: function (val) {
+      this.fullName = val + ' ' + this.lastName
+    },
+    lastName: function (val) {
+      this.fullName = this.firstName + ' ' + val
+    }
+  }
+})
+```
+
+代码是命令式且重复的。
+
+```js
+// 计算属性
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar'
+  },
+  computed: {
+    fullName: function () {
+      return this.firstName + ' ' + this.lastName
+    }
+  }
+})
+```
+
+##### 计算属性的 setter
+
+```js
+// ...
+computed: {
+  fullName: {
+    // getter
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // setter
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+// ...
+```
+
+现在再运行 `vm.fullName = 'John Doe'` 时，setter 会被调用，`vm.firstName` 和 `vm.lastName` 也会相应地被更新。
+
+### 侦听器
+
+Vue 通过 `watch` 选项提供了一个更通用的方法，来响应数据的变化。当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。 
+
+TODO：侦听器示例
 
