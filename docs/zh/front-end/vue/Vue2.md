@@ -769,8 +769,41 @@ HTML 将被渲染为：
 
 ##### 对象语法
 
+`v-bind:style` 的对象语法十分直观，看着非常像 CSS，但其实是一个 JavaScript 对象。CSS property 名可以用驼峰式 (camelCase) 或短横线分隔 (kebab-case，记得用引号括起来) 来命名：
+
+```html
+<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+```
+
+```js
+data: {
+  activeColor: 'red',
+  fontSize: 30
+}
+```
+
+直接绑定到一个样式对象通常更好，这会让模板更清晰：
+
+```html
+<div v-bind:style="styleObject"></div>
+```
+
+```js
+data: {
+  styleObject: {
+    color: 'red',
+    fontSize: '13px'
+  }
+}
+```
+
+同样的，对象语法常常结合返回对象的计算属性使用。
+
 ##### 数组语法
 
-##### 自动添加前缀
+同样的，对象语法常常结合返回对象的计算属性使用。
 
-##### 多重值
+```html
+<div v-bind:style="[baseStyles, overridingStyles]"></div>
+```
+
