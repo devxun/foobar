@@ -255,10 +255,16 @@ module.exports = {
         sidebar: {
           '/zh/front-end/vue/': [
             {
-              title: 'vue',
+              title: 'Vue2',
               // 侧边栏：让一个组永远都是展开状态
               collapsable: false,
-              children: ['Vue2', 'Vue3'],
+              children: ['教程', 'Vue CLI', 'Vue Router', 'Vuex'],
+            },
+            {
+              title: 'Vue3',
+              // 侧边栏：让一个组永远都是展开状态
+              collapsable: false,
+              children: ['Foo', 'Bar'],
             },
           ],
           '/zh/front-end/ui/': [
