@@ -146,7 +146,7 @@ npm run serve
 yarn serve
 ```
 
-如果你可以使用 npx（最新版的 npm 应该已经自带），也可以直接这样调用命令：
+如果可以使用 npx（最新版的 npm 应该已经自带），也可以直接这样调用命令：
 
 ```bash
 npx vue-cli-service serve
@@ -256,6 +256,138 @@ npx vue-cli-service help [command]
             HelloWorld.vue
 ```
 
+#### HTML 和静态资源
 
+##### HTML
+
+###### index 文件
+
+`public/index.html` 文件是一个会被 [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) 处理的模板。在构建过程中，资源链接会被自动注入。另外，Vue CLI 也会自动注入 resource hint（`preload/prefetch`、manifest 和图标链接（当用到 PWA 插件时））以及构建过程中处理的 JavaScript 和 CSS 文件的资源链接。
+
+###### 插值
+
+因为 index 文件被用作模板，所以可以使用 lodash template 语法插入内容：
+
+- `<%= VALUE %>` 用来做不转义插值；
+- `<%- VALUE %>` 用来做 HTML 转义插值；
+- `<% expression %>` 用来描述 JavaScript 流程控制。
+
+除了被 `html-webpack-plugin` 暴露的默认值之外，所有客户端环境变量也可以直接使用。例如，`BASE_URL` 的用法：
+
+``` html
+<link rel="icon" href="<%= BASE_URL %>favicon.ico">
+```
+
+###### 构建一个多页应用
+
+不是每个应用都需要是一个单页应用。Vue CLI 支持使用 `vue.config.js` 中的 `pages` 选项构建一个多页面的应用。构建好的应用将会在不同的入口之间高效共享通用的 chunk 以获得最佳的加载性能。
+
+##### 处理静态资源
+
+静态资源可以通过两种方式进行处理：
+
+- 在 JavaScript 被导入或在 template/CSS 中通过相对路径被引用。这类引用会被 webpack 处理。
+
+- 放置在 `public` 目录下或通过绝对路径被引用。这类资源将会直接被拷贝，而不会经过 webpack 的处理。
+
+###### 从相对路径导入
+
+当在 JavaScript、CSS 或 `*.vue` 文件中使用相对路径（必须以 `.` 开头）引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 `<img src="...">`、`background: url(...)` 和 CSS `@import` 的资源 URL **都会被解析为一个模块依赖**。
+
+例如，`url(./image.png)` 会被翻译为 `require('./image.png')`，而：
+
+``` html
+<img src="./image.png">
+```
+
+将会被编译到：
+
+``` js
+h('img', { attrs: { src: require('./image.png') }})
+```
+
+###### URL 转换规则
+
+- 如果 URL 是一个绝对路径（例如 `/images/foo.png`），它将会被保留不变。
+
+- 如果 URL 以 `.` 开头，它会作为一个相对模块请求被解释且基于文件系统中的目录结构进行解析。
+
+- 如果 URL 以 `~` 开头，其后的任何内容都会作为一个模块请求被解析。这意味着甚至可以引用 Node 模块中的资源：
+
+  ``` html
+  <img src="~some-npm-package/foo.png">
+  ```
+
+- 如果 URL 以 `@` 开头，它也会作为一个模块请求被解析。它的用处在于 Vue CLI 默认会设置一个指向 `<projectRoot>/src` 的别名 `@`。**（仅作用于模版中）**
+
+###### `public` 文件夹
+
+任何放置在 `public` 文件夹的静态资源都会被简单的复制，而不经过 webpack。需要通过绝对路径来引用它们。
+
+注意推荐将资源作为模块依赖图的一部分导入，这样它们会通过 webpack 的处理并获得如下好处：
+
+- 脚本和样式表会被压缩且打包在一起，从而避免额外的网络请求。
+- 文件丢失会直接在编译时报错，而不是到了用户端才产生 404 错误。
+- 最终生成的文件名包含了内容哈希，因此不必担心浏览器会缓存它们的老版本。
+
+`public` 目录提供的是一个**应急手段**，当通过绝对路径引用它时，留意应用将会部署到哪里。如果应用没有部署在域名的根部，那么需要为 URL 配置 publicPath 前缀：
+
+- 在 `public/index.html` 或其它通过 `html-webpack-plugin` 用作模板的 HTML 文件中，需要通过 `<%= BASE_URL %>` 设置链接前缀：
+
+  ``` html
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  ```
+
+- 在模板中，首先需要向组件传入基础 URL：
+
+  ``` js
+  data () {
+    return {
+      publicPath: process.env.BASE_URL
+    }
+  }
+  ```
+
+  然后：
+
+  ``` html
+  <img :src="`${publicPath}my-image.png`">
+  ```
+
+###### 何时使用 `public` 文件夹
+
+- 需要在构建输出中指定一个文件的名字。
+- 有上千个图片，需要动态引用它们的路径。
+- 有些库可能和 webpack 不兼容，这时除了将其用一个独立的 `<script>` 标签引入没有别的选择。
+
+#### 模式
+
+**模式**是 Vue CLI 项目中一个重要的概念。默认情况下，一个 Vue CLI 项目有三个模式：
+
+- `development` 模式用于 `vue-cli-service serve`
+- `test` 模式用于 `vue-cli-service test:unit`
+- `production` 模式用于 `vue-cli-service build` 和 `vue-cli-service test:e2e`
+
+可以通过传递 `--mode` 选项参数为命令行覆写默认的模式。例如，如果想要在构建命令中使用开发环境变量：
+
+```
+vue-cli-service build --mode development
+```
+
+当运行 `vue-cli-service` 命令时，所有的环境变量都从对应的环境文件中载入。如果文件内部不包含 `NODE_ENV` 变量，它的值将取决于模式，例如，在 `production` 模式下被设置为 `"production"`，在 `test` 模式下被设置为 `"test"`，默认则是 `"development"`。
+
+`NODE_ENV` 将决定应用运行的模式，是开发，生产还是测试，因此也决定了创建哪种 webpack 配置。
+
+例如通过将 `NODE_ENV` 设置为 `"test"`，Vue CLI 会创建一个优化过后的，并且旨在用于单元测试的 webpack 配置，它并不会处理图片以及一些对单元测试非必需的其他资源。
+
+同理，`NODE_ENV=development` 创建一个 webpack 配置，该配置启用热更新，不会对资源进行 hash 也不会打出 vendor bundles，目的是为了在开发的时候能够快速重新构建。
+
+当运行 `vue-cli-service build` 命令时，无论要部署到哪个环境，应该始终把 `NODE_ENV` 设置为 `"production"` 来获取可用于部署的应用程序。
+
+```js
+// 例如
+publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+```
 
 ## 配置参考
+
