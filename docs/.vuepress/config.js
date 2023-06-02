@@ -258,7 +258,7 @@ module.exports = {
               title: 'Vue 2',
               // 侧边栏：让一个组永远都是展开状态
               collapsable: false,
-              children: ['Vue 2', 'Vue CLI', 'Vue Router', 'Vuex'],
+              children: ['Vue 2', 'Vue CLI', 'Vue Router v3.x', 'Vuex v3.x'],
             },
             {
               title: 'Vue 3',
