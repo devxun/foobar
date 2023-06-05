@@ -751,7 +751,7 @@ store.dispatch({
 })
 ```
 
-#### 在组件中分发 `action`
+#### 在组件中分发 `Action`
 
 在组件中使用 `this.$store.dispatch('xxx')` 分发 `action`，或者使用 ``mapActions`` 辅助函数将组件的 `methods` 映射为 `store.dispatch` 调用（需要先在根节点注入 `store`）：
 
@@ -859,5 +859,19 @@ new Vue({
     ...new Vuex.mapActions(['increment', 'decrement']),
   },
 }).$mount('#app')
+```
+
+### Modules
+
+```
+TODO: 
+```
+
+## 进阶
+
+### 项目结构
+
+```
+TODO: https://github.com/vuejs/vuex/tree/3.x/examples/shopping-cart
 ```
 
