@@ -1,226 +1,663 @@
 # Vue 3
 
-## 开始
+## 创建一个 Vue 3 应用
 
-### 简介
+> **知识点**
+>
+> - 脚手架工具
+>   - Vue 2 应用中，脚手架工具为 `Vue CLI`，基于 `webpack` 构建
+>   - Vue 3 应用中，脚手架工具为 `create-vue`，基于 `Vite` 构建
+> - 项目启动
+>   - Vue 2 应用中，项目启动命令为 `npm run serve`
+>   - Vue 3 应用中，项目启动命令为 `npm run dev`
 
-```js
-// Vue 3
-import { createApp } from 'vue'
+```sh
+npm init vue@latest
+Need to install the following packages:
+  create-vue@3.6.4
+Ok to proceed? (y) y
 
-createApp({
-  data() {
-    return {
-      count: 0
-    }
-  }
-}).mount('#app')
+Vue.js - The Progressive JavaScript Framework
+
+√ Project name: ... vue-project
+√ Add TypeScript? ... No / Yes
+√ Add JSX Support? ... No / Yes
+√ Add Vue Router for Single Page Application development? ... No / Yes
+√ Add Pinia for state management? ... No / Yes
+√ Add Vitest for Unit Testing? ... No / Yes
+√ Add an End-to-End Testing Solution? » - Use arrow-keys. Return to submit.
+>   No
+    Cypress
+    Playwright
+√ Add ESLint for code quality? ... No / Yes
+√ Add Prettier for code formatting? ... No / Yes
+
+Scaffolding project in E:\project\pro\vue-project...
+
+Done. Now run:
+
+  cd vue-project
+  npm install
+  npm run dev
+
+
 ```
 
-```js
-// Vue 2
-import Vue from 'vue'
+## 组合式 API
 
-new Vue({
-  data() {
-    return {
-      count: 0
-    }
-  }
-}).$mount('#app')
-```
+### `setup()`
 
-```html
-<div id="app">
-  <button @click="count++">
-    Count is: {{ count }}
-  </button>
-</div>
-```
-
-#### API 风格
-
-##### 选项式 API
+**生命周期**
 
 ```vue
 <script>
 export default {
-  // `data()` 返回的属性将会成为响应式的状态
-  // 并且暴露在 `this` 上
-  data() {
+  // `setup()` 优先于 `beforeCreate()`，并自动执行
+  setup() {
+    console.log('setup')
+  },
+  beforeCreate() {
+    console.log('beforeCreate')
+  },
+}
+</script>
+```
+
+`setup()` 钩子是在组件中使用组合式 API 的入口。
+
+`setup()` 自身并不含对组件实例的访问权，即在 `setup()` 中访问 `this` 会是 `undefined`。 
+
+```vue
+<script>
+export default {
+  setup() {
+    console.log('setup')
+    console.log(this) // undefined
+  },
+  beforeCreate() {
+    console.log('beforeCreate')
+  },
+}
+</script>
+```
+
+`setup()` 应该使用 `return` 同步地 **返回一个对象**。
+
+> **知识点**
+>
+> - `ref()` 可以接收任意值类型
+> - `reactive()` 只能接收对象类型（包括数组）
+
+#### `ref()`
+
+```vue
+<!-- 使用 `ref()` 函数创建一个响应式对象，此对象只有一个指向其内部值的属性 `.value` -->
+<script>
+import { ref } from 'vue'
+
+export default {
+  setup() {
+    console.log('setup')
+    // 参数：简单类型 + 对象或数组类型
+    const count = ref(0)
+    const increment = () => count.value++
     return {
-      count: 0
+      count,
+      increment,
     }
   },
-
-  // `methods` 是一些用来更改状态与触发更新的函数
-  // 它们可以在模板中作为事件处理器绑定
-  methods: {
-    increment() {
-      this.count++
-    }
+  beforeCreate() {
+    console.log('beforeCreate')
   },
-
-  // 生命周期钩子会在组件生命周期的各个不同阶段被调用
-  // 例如这个函数就会在组件挂载完成后被调用
-  mounted() {
-    console.log(`The initial count is ${this.count}.`)
-  }
 }
 </script>
 
 <template>
-  <button @click="increment">Count is: {{ count }}</button>
+  <div>
+    <h3>{{ count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
 </template>
 ```
 
-##### 组合式 API
+#### 响应式对象 `reactive()`
+
+```vue
+<!-- 使用 `reactive()` 函数创建一个响应式对象 -->
+<script>
+import { reactive } from 'vue'
+
+export default {
+  setup() {
+    console.log('setup')
+    // 参数：对象或数组类型
+    const state = reactive({ count: 0 })
+    const increment = () => state.count++
+    return {
+      state,
+      increment,
+    }
+  },
+  beforeCreate() {
+    console.log('beforeCreate')
+  },
+}
+</script>
+
+<template>
+  <div>
+    <h3>{{ state.count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```
+
+#### `<script setup>`
+
+> 对于结合单文件组件使用的组合式 API，推荐通过 `<script setup></script>` 以获得更加简洁及符合 **人体工程学** 的语法。其实就是 **语法糖**。
+
+```vue
+<!-- `ref` -->
+<script setup>
+import { ref } from 'vue'
+
+const count = ref(0)
+const increment = () => count.value++
+</script>
+
+<template>
+  <div>
+    <h3>{{ count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```
+
+```vue
+<!-- `reactive` -->
+<script setup>
+import { reactive } from 'vue'
+
+const state = reactive({ count: 0 })
+const increment = () => state.count++
+</script>
+
+<template>
+  <div>
+    <h3>{{ state.count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```
+
+### 计算属性 `computed()`
+
+```vue
+<!-- `ref` -->
+<script setup>
+import { computed, ref } from 'vue'
+
+const arr = ref([1, 2, 3, 4, 5, 6, 7, 8])
+const filterArray = computed(() => {
+  return arr.value.filter((item) => item % 2 == 0)
+})
+</script>
+
+<template>
+  <div>
+    <h3>{{ filterArray }}</h3>
+  </div>
+</template>
+```
+
+```vue
+<!-- `reactive` -->
+<script setup>
+import { computed, reactive } from 'vue'
+
+const arr = reactive([1, 2, 3, 4, 5, 6, 7, 8])
+const filterArray = computed(() => {
+  return arr.filter((item) => item % 2 == 0)
+})
+</script>
+
+<template>
+  <div>
+    <h3>{{ filterArray }}</h3>
+  </div>
+</template>
+```
+
+### 侦听器 `watch()`
+
+#### 侦听 `ref` 对象
 
 ```vue
 <script setup>
-// 使用导入的 `API` 函数来描述组件逻辑
-import { ref, onMounted } from 'vue'
+import { watch, ref } from 'vue'
 
-// 响应式状态
 const count = ref(0)
-
-// 用来修改状态、触发更新的函数
-function increment() {
-  count.value++
-}
-
-// 生命周期钩子
-onMounted(() => {
-  console.log(`The initial count is ${count.value}.`)
+const increment = () => count.value++
+watch(count, (newValue, oldValue) => {
+  console.log(newValue, oldValue)
 })
 </script>
 
 <template>
-  <button @click="increment">Count is: {{ count }}</button>
+  <div>
+    <h3>{{ count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
 </template>
 ```
 
-### 快速上手
+```vue
+// 侦听多个来源，回调函数接受两个数组，分别对应来源数组中的新值和旧值
+<script setup>
+import { watch, ref } from 'vue'
 
-#### 创建一个 `Vue` 应用
-
-基于 `Vite` 构建工具：
-
-```sh
-npm init vue@latest # 当前指令将安装并执行 `create-vue`
-```
-
-```sh
-# 基于 `Vue CLI` 构建工具
-vue create hello-world
-```
-
-使用 `yarn` + `vite` 方式：
-
-```js
-// TODO: ...
-```
-
-#### 通过 `CDN` 使用 `Vue`
-
-**Vue 3** `CDN` 地址：`https://unpkg.com/vue@3`
-
-如果是 **Vue 2**，则地址为：`https://unpkg.com/vue@2`
-
-***全局构建版本***
-
-```html
-<!-- 截止目前（2023年5月31日）的最新版本 -->
-<script>https://unpkg.com/vue@3.3.4/dist/vue.global.js</script> 
-
-<div id="app">{{ message }}</div>
-
-<script>
-  // 该版本的所有顶层 `API` 都以属性的形式暴露在了全局的 `Vue` 对象上
-  const { createApp } = Vue
-  
-  createApp({
-    data() {
-      return {
-        message: 'Hello Vue!'
-      }
-    }
-  }).mount('#app')
+const count = ref(0)
+const cnt = ref(100)
+const increment = () => count.value++
+const decrement = () => cnt.value--
+watch([count, cnt], ([newCount, newCnt], [oldCount, oldCnt]) => {
+  console.log([newCount, newCnt], [oldCount, oldCnt])
+})
 </script>
+
+<template>
+  <div>
+    <h3>{{ count }}</h3>
+    <h3>{{ cnt }}</h3>
+    <button @click="increment">+1</button>
+    <br />
+    <button @click="decrement">-1</button>
+  </div>
+</template>
 ```
 
-## 基础
+**`immediate`**：在侦听器创建时立即触发回调。第一次调用时旧值是 `undefined`。
 
-### 创建一个应用
+```vue
+<script setup>
+import { watch, ref } from 'vue'
 
-#### 应用实例
+const count = ref(0)
+const increment = () => count.value++
+watch(
+  count,
+  (newValue, oldValue) => {
+    console.log(newValue, oldValue) // 0 undefined
+  },
+  {
+    immediate: true,
+  }
+)
+</script>
 
-每个 `Vue` 应用都是通过 `createApp` **函数** 创建一个新的 **应用实例**：
+<template>
+  <div>
+    <h3>{{ count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```
 
-```js
-// Vue 3
-import { createApp } from 'vue'
+**`deep`**：如果侦听源是对象，强制深度遍历，以便在深层级变更时触发回调。
 
-const app = createApp({
-  // 根组件选项
-  // data
-  // methods
-  // computed
-  // watch
+```vue
+<script setup>
+import { watch, ref } from 'vue'
+
+const state = ref({ count: 0 })
+const increment = () => state.value.count++
+watch(
+  state,
+  (newValue, oldValue) => {
+    console.log(newValue, oldValue)
+  },
+  {
+    deep: true,
+  }
+)
+</script>
+
+<template>
+  <div>
+    <h3>{{ state.count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```
+
+```vue
+<script setup>
+import { watch, ref } from 'vue'
+
+const state = ref({ count: 0, cnt: 100 })
+const increment = () => state.value.count++
+const decrement = () => state.value.cnt--
+watch(
+  // 精准侦听
+  () => state.value.count,
+  (newValue, oldValue) => {
+    console.log(newValue, oldValue)
+  }
+)
+</script>
+
+<template>
+  <div>
+    <h3>{{ state.count }}</h3>
+    <h3>{{ state.cnt }}</h3>
+    <button @click="increment">+1</button>
+    <br />
+    <button @click="decrement">-1</button>
+  </div>
+</template>
+```
+
+#### 侦听 `reactive` 对象
+
+当直接侦听一个响应式对象时，侦听器会自动启用深层模式。
+
+```vue
+<script setup>
+import { watch, reactive } from 'vue'
+
+const state = reactive({ count: 0 })
+const increment = () => state.count++
+watch(state, (newValue, oldValue) => {
+  console.log(newValue, oldValue)
 })
+</script>
 
-app.mount('#app')
+<template>
+  <div>
+    <h3>{{ state.count }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
 ```
 
-```js
-// Vue 2
-import Vue from 'vue'
+### 组件基础
 
-const app = new Vue({
-  // 根组件选项
-  // data
-  // methods
-  // computed
-  // watch
+#### 父传子
+
+```vue
+<!-- 父组件 -->
+<script setup>
+import ChildComponent from './components/ChildComponent.vue'
+
+import { ref } from 'vue'
+const count = ref(0)
+</script>
+
+<template>
+  <div>
+    <h3>Here is a child component!</h3>
+    <!-- 在单文件组件中，推荐为子组件使用 `PascalCase` 的标签名，也可以使用 `/>` 来关闭一个标签 -->
+    <!-- 传递动态或静态 props -->
+    <ChildComponent :count="count" message="Parent message!" />
+    <!-- 如果是直接在非单文件组件的 `DOM` 中书写模板，就需要使用 `kebab-case` 形式并显式地关闭这些组件的标签 -->
+  </div>
+</template>
+```
+
+```vue
+<!-- 子组件：写法一 -->
+<script setup>
+// `defineProps` 是一个编译宏命令
+// 字符串数组形式
+const props = defineProps(['message'])
+</script>
+
+<template>
+  <div>
+    <h3>{{ props.message }}</h3>
+  </div>
+</template>
+```
+
+```vue
+<!-- 子组件：写法二 -->
+<script setup>
+defineProps(['count', 'message'])
+</script>
+
+<template>
+  <div>
+    <h3>{{ count }}</h3>
+    <h3>{{ message }}</h3>
+  </div>
+</template>
+```
+
+```vue
+<!-- 子组件：写法三 -->
+<script setup>
+// 对象形式
+defineProps({
+  count: Number,
+  message: String,
 })
+</script>
 
-app.$mount('#app')
+<template>
+  <div>
+    <h3>{{ count }}</h3>
+    <h3>{{ message }}</h3>
+  </div>
+</template>
 ```
 
-#### 根组件
+> 如果一个 `prop` 的名字很长，子组件接收时应使用 `camelCase` 形式，父组件向子组件传递时，通常会将其写为 `kebab-case` 形式。
 
-传入 `createApp` 的 **对象** 实际上是一个组件，称之为 **根组件**。
+```vue
+<!-- 父组件 -->
+<script setup>
+import ChildComponent from './components/ChildComponent.vue'
 
-```js
-import { createApp } from 'vue'
+import { ref } from 'vue'
+const longProp = ref('long prop')
+</script>
 
-// 从一个单文件组件中导入根组件
-import App from './App.vue'
-
-const app = createApp(App)
+<template>
+  <div>
+    <h3>Here is a child component!</h3>
+    <ChildComponent :long-prop="longProp" />
+  </div>
+</template>
 ```
 
-#### 挂载应用
+```vue
+<!-- 子组件 -->
+<script setup>
+defineProps({
+  longProp: String,
+})
+</script>
 
-应用实例必须在调用了 `.mount()` 方法后才会渲染出来。该方法接收一个 **容器** 参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串：
-
-```html
-<div id="app"></div>
+<template>
+  <div>
+    <h3>{{ longProp }}</h3>
+  </div>
+</template>
 ```
 
-```js
-app.mount('#app')
+#### 子传父
+
+```vue
+<!-- 父组件 -->
+<script setup>
+import ChildComponent from './components/ChildComponent.vue'
+
+import { ref } from 'vue'
+
+const count = ref(0)
+const increment = (n) => (count.value += n)
+</script>
+
+<template>
+  <div>
+    <h3>Here is a child component!</h3>
+    <h4>{{ count }}</h4>
+    <ChildComponent @increment="increment" />
+  </div>
+</template>
 ```
 
-或：
+```vue
+<!-- 子组件 -->
+<script setup>
+// `defineEmits` 是一个编译宏命令，不能在子函数中使用。必须直接放置在 `<script setup>` 的顶级作用域下
+const emit = defineEmits(['increment'])
 
-```html
-<div class="app"></div>
+const sendDelta = () => {
+  emit('increment', 2)
+}
+</script>
+
+<template>
+  <div>
+    <button @click="sendDelta">+2</button>
+  </div>
+</template>
 ```
 
-```js
-app.mount('.app')
+### 模板引用 `ref`
+
+> 只可以 **在组件挂载后** 才能访问模板引用。
+
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const h3Ref = ref(null)
+
+onMounted(() => {
+  console.log(h3Ref.value) // <h3>hello</h3>
+})
+</script>
+
+<template>
+  <div>
+    <h3 ref="h3Ref">hello</h3>
+  </div>
+</template>
 ```
 
-应用根组件的内容将会被渲染在容器元素里面。
+#### 组件上的 `ref`
 
+```vue
+<script setup>
+import ChildComponent from './components/ChildComponent.vue'
+
+import { ref, onMounted } from 'vue'
+
+const h3Ref = ref(null)
+
+const childRef = ref(null)
+
+onMounted(() => {
+  console.log(h3Ref.value)
+  // 子组件未使用 `defineExpose` 显式暴露时，Proxy(Object) {__v_skip: true}
+  // 子组件使用 `defineExpose` 显式暴露时，Proxy(Object) {count: RefImpl, __v_skip: true, increment: ƒ}
+  console.log(childRef.value)
+  
+  console.log(childRef.value.count) // 0
+  console.log(childRef.value.increment) // () => count.value++
+  childRef.value.increment()
+  console.log(childRef.value.count) // 1
+})
+</script>
+
+<template>
+  <div>
+    <h3 ref="h3Ref">hello</h3>
+    <ChildComponent ref="childRef" />
+  </div>
+</template>
+```
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const count = ref(0)
+
+const increment = () => count.value++
+
+// 使用了 `<script setup>` 的组件是默认私有的：一个父组件无法访问到一个使用了 `<script setup>` 的子组件中的任何东西，除非子组件在其中通过 `defineExpose` 宏显式暴露
+// 应该首先使用标准的 `props` 和 `emit` 接口来实现父子组件交互
+defineExpose({
+  count,
+  increment,
+})
+</script>
+
+<template>
+  <div>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```
+
+### 依赖注入
+
+`provide` 和 `inject`  主要解决 **`prop` 逐级透传** 问题，由顶层组件提供依赖，底层组件注入依赖。
+
+```vue
+<!-- App.vue -->
+<script setup>
+import { ref, provide } from 'vue'
+import ChildComponent from './components/ChildComponent.vue'
+
+const message = ref('hello')
+// 传递数据
+provide(/* 注入名 */ 'message', /* 值 */ message)
+  
+const count = ref(0)
+const increment = () => count.value++
+// 传递方法
+provide('increment', increment)
+</script>
+
+<template>
+  <div>
+    <input v-model="message" />
+    <h3>{{ count }}</h3>
+    <ChildComponent />
+  </div>
+</template>
+```
+
+```vue
+<!-- ChildComponent.vue -->
+<script setup>
+import GrandChildComponent from './GrandChildComponent.vue'
+</script>
+
+<template>
+  <div>
+    <GrandChildComponent />
+  </div>
+</template>
+```
+
+```vue
+<!-- GrandChildComponent.vue -->
+<script setup>
+import { inject } from 'vue'
+
+const message = inject(/* 注入名 */ 'message')
+const increment = inject('increment')
+</script>
+
+<template>
+  <div>
+    <h3>{{ message }}</h3>
+    <button @click="increment">+1</button>
+  </div>
+</template>
+```

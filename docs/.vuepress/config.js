@@ -264,7 +264,7 @@ module.exports = {
               title: 'Vue 3',
               // 侧边栏：让一个组永远都是展开状态
               collapsable: false,
-              children: ['Foo', 'Bar'],
+              children: ['Vue 3', 'Pinia'],
             },
           ],
           '/zh/front-end/ui/': [
